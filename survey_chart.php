@@ -75,11 +75,6 @@ $conn = connectDB();
 									<div class="col-auto">
 										<h4 class="app-card-title">Trend</h4>
 									</div><!--//col-->
-									<div class="col-auto">
-										<div class="card-header-action">
-											<a href="charts.html">More charts</a>
-										</div><!--//card-header-actions-->
-									</div><!--//col-->
 								</div><!--//row-->
 							</div><!--//app-card-header-->
 							<div class="app-card-body p-3 p-lg-4">
@@ -175,15 +170,12 @@ $conn = connectDB();
 							</div><!--//row-->
 						</div><!--//app-card-header-->
 						<div class="app-card-body p-3 p-lg-4">
-							<div class="mb-3 d-flex form-group">
-
+							<div class="col-md-6 mb-3 form-group">
 								<?php
-								$sql = "Select * from podio";
-								$result = $conn->query($sql);
-								$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+								$rows = Read_record($conn, "podio", "");
 								?>
-								<label class="form-label" for="area_select" style="float: right;">Select an area</label>
-								<select class="form-select form-select-sm ms-auto d-inline-flex w-auto" id="area_select">
+								<label class="form-label" for="area_select">Select an area</label>
+								<select class="form-control" id="area_select">
 									<?php
 									foreach ($rows as $row) {
 										echo "<option value='" . $row['podio_link'] . "'>" . $row['podio_link'] . "</p>";

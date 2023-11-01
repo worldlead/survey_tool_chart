@@ -26,35 +26,28 @@ $conn = connectDB();
 </head>
 
 <body class="app">
-
     <div class="app-wrapper">
-
         <div class="app-content pt-3 p-md-3 p-lg-4">
             <div class="container-xl">
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         <h1 class="app-page-title">Survey</h1>
                     </div>
                     <div class="col-md-6">
                         <a href="survey_chart.php" class="btn btn-info" style="float: right;">Go to Survey Charts</a>
                     </div>
                 </div>
-
-               
                 <hr class="mb-4">
-           
                 <div class="row g-4 settings-section">
-                    <div class="col-12 col-md-4">
+                    <div class="col-12 col-md-3">
                         <h3 class="section-title">Survey Taker</h3>
                         <div class="section-intro">Select email addresses to which you are going to send surveys</div>
                     </div>
-                    <div class="col-12 col-md-8">
+                    <div class="col-12 col-md-9">
                         <div class="app-card app-card-settings shadow-sm p-4">
                             <div class="app-card-body">
                                 <?php 
-                                $sql = "Select * from users";
-                                $result = $conn->query($sql);
-                                $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                                $rows = Read_record($conn, "users", "");
                                 ?>
                                 <form class="settings-form" method="post" action="send_url.php">
 
@@ -75,18 +68,16 @@ $conn = connectDB();
                                                 </label>
                                             </div>
                                         </div>
-                                    </div><!--//form-check-->
+                                    </div>
                                     <?php } ?>
                                     <label class="form-label" for="podio_link">Podio Link</label>
                                     <?php 
-                                    $sql = "Select * from podio";
-                                    $result = $conn->query($sql);
-                                    $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+                                    $podios = Read_record($conn, "podio", "");
                                     ?>
                                     <Select name="podio_link" id="podio_link" class="form-control">
                                         <?php 
-                                            foreach($rows as $row) {
-                                                echo "<option value='".$row['podio_link']."'>".$row['podio_link']."</p>";
+                                            foreach($podios as $podio) {
+                                                echo "<option value='".$podio['podio_link']."'>".$podio['podio_link']."</p>";
                                             }
                                         ?>
                                     </Select>
@@ -94,14 +85,13 @@ $conn = connectDB();
                                         <button type="submit" class="btn app-btn-primary" name="send_url" value="send_url">Send Survey</button>
                                     </div>
                                 </form>
-                            </div><!--//app-card-body-->
-                        </div><!--//app-card-->
+                            </div>
+                        </div>
                     </div>
-                </div><!--//row-->
-            </div><!--//container-fluid-->
-        </div><!--//app-content-->
-    </div><!--//app-wrapper-->
-
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Javascript -->
     <script src="assets/plugins/popper.min.js"></script>

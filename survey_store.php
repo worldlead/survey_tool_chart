@@ -7,11 +7,9 @@ $conn = connectDB();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $validator = test_input($_POST['validator']);
-    
     $buyPrice = test_input($_POST['buy_price']);
-    $sellPrice = test_input($_POST['sale_price']);
+    $sellPrice = test_input($_POST['sell_price']);
     $notes = test_input($_POST['notes']);
-
     
     $stmt = $conn->query("SELECT email, podio_link FROM survey_tokens WHERE token = '" . $validator. "'");
 	$res = $stmt->fetch();

@@ -48,15 +48,15 @@ require_once "db_functions.php";
                         <!-- Champs du formulaire -->
                         <label class="form-label">Buy Price</label>
                         <div class="form-group m-3">
-                            <input type="text" id="newpassword" name="buy_price" class="form-control" placeholder="">
+                            <input type="text" id="buy_price" name="buy_price" class="form-control" placeholder="">
                         </div>
                         <label class="form-label">Sale Price</label>
                         <div class="form-group m-3">
-                            <input type="text" id="confirmpassword" name="sale_price" class="form-control" placeholder="">
+                            <input type="text" id="sell_price" name="sell_price" class="form-control" placeholder="">
                         </div>
                         <label class="form-label">Notes</label>
                         <div class="form-group m-3">
-                            <input type="text" id="confirmpassword" name="notes" class="form-control" placeholder="">
+                            <input type="text" id="notes" name="notes" class="form-control" placeholder="">
                         </div>
 
                         <!-- Bouton de soumission -->
@@ -65,9 +65,7 @@ require_once "db_functions.php";
                         </button>
 
                     </form>
-
                 <?php } ?>
-
             </div>
         </div>
     </div>

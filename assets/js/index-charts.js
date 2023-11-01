@@ -24,7 +24,7 @@ jQuery(function() {
 			labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
 			
 			datasets: [{
-				label: 'Current week',
+				label: 'Buy',
 				fill: false,
 				backgroundColor: window.chartColors.green,
 				borderColor: window.chartColors.green,
@@ -38,7 +38,7 @@ jQuery(function() {
 					randomDataPoint()
 				],
 			}, {
-				label: 'Previous week',
+				label: 'Sell',
 				borderDash: [3, 5],
 				backgroundColor: window.chartColors.gray,
 				borderColor: window.chartColors.gray,
@@ -228,15 +228,7 @@ jQuery(function() {
 				position: 'bottom',
 				align: 'end',
 			},
-			plugins: {
-				datalabels: {
-					anchor: 'end',
-					align: 'end',
-					font: {
-						size: 12,
-					}
-				}
-			},
+			
 			title: {
 				display: true,
 				text: 'Buy to Sale'
@@ -282,68 +274,60 @@ jQuery(function() {
 	// Generate charts on load
 	window.addEventListener('load', function(){
 		
-		var lineChart = document.getElementById('canvas-linechart').getContext('2d');
-		window.myLine = new Chart(lineChart, lineChartConfig);
-		
 		$.post("read_chart_data.php", { 
 			link: $("#area_select").val() 
 		}, function(data, status) {
 			const records = JSON.parse(data);
-			const labels = records.map(rec => `${rec.firstname} ${rec.lastname}`)
-			const buyPrices = records.map((record) => record.buyPrice);
-			const sellPrices = records.map(record => record.sellPrice);
-			const sumOfBuyPrices = buyPrices.reduce((total, price) => total + parseFloat(price), 0);
-			const sumOfSellPrices = sellPrices.reduce((total, price) => total + parseFloat(price), 0);
-			const profitRatio = (sumOfSellPrices - sumOfBuyPrices) / sumOfBuyPrices * 100;
-			
-			barChartConfig.data.labels = labels;
-			barChartConfig.data.datasets[0].data = buyPrices;
-			barChartConfig.data.datasets[1].data = sellPrices;
+			updateChartsAndUI(records);
+
 			var barChart = document.getElementById('canvas-barchart').getContext('2d');
 			window.myBar = new Chart(barChart, barChartConfig);
-
-			totalBarChartConfig.data.datasets[0].data = [sumOfBuyPrices];
-			totalBarChartConfig.data.datasets[1].data = [sumOfSellPrices];
-			$("#total_buy_price").text("$" + sumOfBuyPrices.toLocaleString());
-			$("#total_sell_price").text("$" + sumOfSellPrices.toLocaleString());
-			$("#profit_ratio").text(profitRatio.toFixed(2) + "%");
+			
 			var totalBarChart = document.getElementById('canvas-barchart-total').getContext('2d');
 			window.myTotalBar = new Chart(totalBarChart, totalBarChartConfig);
-			
+
+			var lineChart = document.getElementById('canvas-linechart').getContext('2d');
+			window.myLine = new Chart(lineChart, lineChartConfig);
 		});
-		
 	});	
 
+	// Generate charts on selecting the area
 	$("#area_select").on('change', function() {
 		
 		$.post("read_chart_data.php", { 
 			link: $(this).val() 
 		}, function(data, status) {
 			const records = JSON.parse(data);
-			const labels = records.map(rec => `${rec.firstname} ${rec.lastname}`)
-			const buyPrices = records.map((record) => record.buyPrice);
-			const sellPrices = records.map(record => record.sellPrice);
-			const sumOfBuyPrices = buyPrices.reduce((total, price) => total + parseFloat(price), 0);
-			const sumOfSellPrices = sellPrices.reduce((total, price) => total + parseFloat(price), 0);
-			const profitRatio = (sumOfSellPrices - sumOfBuyPrices) / sumOfBuyPrices * 100;
-			
-			$("#total_buy_price").text("$" + sumOfBuyPrices.toLocaleString());
-			$("#total_sell_price").text("$" + sumOfSellPrices.toLocaleString());
-			$("#profit_ratio").text(profitRatio.toFixed(2) + "%");
-			
-			barChartConfig.data.labels = labels;
-			barChartConfig.data.datasets[0].data = buyPrices;
-			barChartConfig.data.datasets[1].data = sellPrices;
+			updateChartsAndUI(records);
 			window.myBar.update();
-
-			
-			totalBarChartConfig.data.datasets[0].data = [sumOfBuyPrices];
-			totalBarChartConfig.data.datasets[1].data = [sumOfSellPrices];
 			window.myTotalBar.update();
 		});
 	});
 
+	function updateChartsAndUI(records) {
+		const labels = records.map(rec => `${rec.firstname} ${rec.lastname}`);
+		const buyPrices = records.map((record) => record.buyPrice);
+		const sellPrices = records.map(record => record.sellPrice);
+		const sumOfBuyPrices = buyPrices.reduce((total, price) => total + parseFloat(price), 0);
+		const sumOfSellPrices = sellPrices.reduce((total, price) => total + parseFloat(price), 0);
+		const profitRatio = (sumOfSellPrices - sumOfBuyPrices) / sumOfBuyPrices * 100;
+	
+		$("#total_buy_price").text("$" + sumOfBuyPrices.toLocaleString());
+		$("#total_sell_price").text("$" + sumOfSellPrices.toLocaleString());
+		$("#profit_ratio").text(profitRatio.toFixed(2) + "%");
+	
+		barChartConfig.data.labels = labels;
+		barChartConfig.data.datasets[0].data = buyPrices;
+		barChartConfig.data.datasets[1].data = sellPrices;
+	
+		totalBarChartConfig.data.datasets[0].data = [sumOfBuyPrices];
+		totalBarChartConfig.data.datasets[1].data = [sumOfSellPrices];
 
+		lineChartConfig.data.labels = labels;
+		lineChartConfig.data.datasets[0].data = buyPrices;
+		lineChartConfig.data.datasets[1].data = sellPrices;
+		
+	}
 
 
 
