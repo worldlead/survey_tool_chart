@@ -1,0 +1,7 @@
+{
+    "require": {
+        "dompdf/dompdf": "^2.0",
+        "getbrevo/brevo-php": "1.x.x"
+        
+    }
+}
